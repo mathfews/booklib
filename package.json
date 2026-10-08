@@ -1,0 +1,11 @@
+{
+  "name": "booklib",
+  "version": "1.0.0",
+  "description": "a book library",
+  "license": "ISC",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "cd src/ && node server.js"
+  }
+}
