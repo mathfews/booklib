@@ -1,4 +1,5 @@
 import http from "node:http"
+import { parse } from "node:path"
 
 const port = 3000
 
@@ -48,8 +49,9 @@ const server = http.createServer((req, res) => {
             req.on('end', () => {
                 let parsedContent = JSON.parse(body)
                 books.push(parsedContent)
+                res.statusCode = 201
                 console.log(`The book, ${parsedContent.title}, was succesfully added!`)
-                res.end()
+                res.end(JSON.stringify(parsedContent))
             })
         }
     }
