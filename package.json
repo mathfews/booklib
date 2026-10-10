@@ -6,9 +6,10 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "cd src/ && node server.js"
+    "start": "cd src/ && nodemon server.js"
   },
   "dependencies": {
-    "express": "^5.3.0"
+    "express": "^5.3.0",
+    "nodemon": "^3.1.14"
   }
 }
