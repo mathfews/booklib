@@ -1,9 +1,8 @@
 import http from "node:http"
-import { parse } from "node:path"
 
 const port = 3000
 
-const books = [
+let books = [
     {
         "id": 1,
         "title": "The Pragmatic Programmer",
@@ -53,6 +52,24 @@ const server = http.createServer((req, res) => {
                 console.log(`The book, ${parsedContent.title}, was succesfully added!`)
                 res.end(JSON.stringify(parsedContent))
             })
+        }
+    }
+    else if (req.method == "DELETE") {
+        if (req.url.includes("/books/")) {
+            const id = Number(myUrl.pathname.slice(7))
+            const deletedBook = books.find(book => book.id == id)
+            if (deletedBook != undefined) {
+                const booksFiltered = books.filter(book => book.id != id)
+                books = booksFiltered
+                console.log(`The book, ${deletedBook.title} was succesfully deleted.`)
+                res.statusCode = 204
+                res.end()
+            }
+            else {
+                res.statusCode = 404
+                console.log("Book not found")
+                res.end(JSON.stringify("Book not found"))
+            }
         }
     }
 })
