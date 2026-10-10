@@ -21,6 +21,10 @@ app.get("/", (req,res) => {
     res.send("Homepage")
 })
 
+app.get("/books", (req,res) => {
+    res.json(books)
+})
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)
 })
