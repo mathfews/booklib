@@ -25,6 +25,12 @@ app.get("/books", (req,res) => {
     res.json(books)
 })
 
+app.get("/books/:id", (req,res) => {
+    const id = req.params.id
+    const selectedBook = books.find(book => book.id == id)
+    res.send(selectedBook != undefined ? selectedBook : "Book not found")
+})
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)
 })
