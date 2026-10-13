@@ -2,6 +2,9 @@ import express from "express"
 
 const app = express()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 const port = 3000
 
 let books = [
@@ -30,6 +33,12 @@ app.get("/books/:id", (req,res) => {
     const selectedBook = books.find(book => book.id == id)
     res.statusCode = selectedBook != undefined ? 200 : 404
     res.send(selectedBook != undefined ? selectedBook : "Book not found")
+})
+
+app.post("/books", (req, res) => {
+    const addedBook = req.body
+    books.push(addedBook)
+    res.end()
 })
 
 app.delete("/books/:id", (req, res) => {
