@@ -48,6 +48,20 @@ app.delete("/books/:id", async (req, res) => {
     })
 })
 
+app.patch("/books/:id", async (req, res) => {
+    const id = req.params.id
+    const {title, author} = req.body
+    const avalibleColumns = [title, author, id]
+    if (title == null && author == null) {
+        return res.status(400).end()
+    }
+    else {
+        await pool.query(`update books set${title == null ? "" : " title = ?"}${author != null && title != null ? "," : ""}${author == null ? "" : "author = ?"} where id = ?`, avalibleColumns.filter(element => element != null)).then(result => {
+            result[0].affectedRows === 0 ? res.status(404).json({"message": "Book not found"}) : res.status(200).json({"message": `Book ${id} updated succesfully`})
+        })
+    }
+})
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)
 })
