@@ -38,7 +38,7 @@ app.get("/books/:id", (req,res) => {
 app.post("/books", (req, res) => {
     const addedBook = req.body
     books.push(addedBook)
-    res.end()
+    res.status(201).json(addedBook)
 })
 
 app.delete("/books/:id", (req, res) => {
