@@ -35,10 +35,10 @@ app.get("/books/:id", (req,res) => {
     }) 
 })
 
-app.post("/books", (req, res) => {
-    const addedBook = req.body
-    books.push(addedBook)
-    res.status(201).json(addedBook)
+app.post("/books", async (req, res) => {
+    const {title, author} = req.body
+    await pool.query("insert into books (title, author) values (? , ?)", [title, author])
+    res.end()
 })
 
 app.delete("/books/:id", (req, res) => {
