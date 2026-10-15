@@ -30,9 +30,9 @@ app.get("/books", (req,res) => {
 
 app.get("/books/:id", (req,res) => {
     const id = Number(req.params.id)
-    const selectedBook = books.find(book => book.id == id)
-    res.statusCode = selectedBook != undefined ? 200 : 404
-    res.send(selectedBook != undefined ? selectedBook : "Book not found")
+    pool.query("select * from books where id = ?", [id]).then(result => {
+        res.json(result[0].length == 0 ? {"message": "not found"} : result[0])
+    }) 
 })
 
 app.post("/books", (req, res) => {
