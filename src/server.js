@@ -41,20 +41,10 @@ app.post("/books", async (req, res) => {
     res.end()
 })
 
-app.delete("/books/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const selectedBook = books.find(book => book.id === id)
-    if (selectedBook != undefined) {
-        const filteredBooks = books.filter(book => book.id !== id)
-        books = filteredBooks
-        console.log(`The book, ${selectedBook.title} was sucessfully deleted.`)
-        res.statusCode = 204
-        res.end()
-    }
-    else {
-        res.statusCode = 404
-        res.send("Book not found.")
-    }
+app.delete("/books/:id", async (req, res) => {
+    const id = req.params.id
+    await pool.query("delete from books where id = ?", [id])
+    res.end()
 })
 
 app.listen(port, () => {
