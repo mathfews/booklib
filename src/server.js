@@ -43,8 +43,9 @@ app.post("/books", async (req, res) => {
 
 app.delete("/books/:id", async (req, res) => {
     const id = req.params.id
-    await pool.query("delete from books where id = ?", [id])
-    res.end()
+    await pool.query("delete from books where id = ?", [id]).then(result => {
+        result[0].affectedRows === 0 ? res.status(404).json({"message": "Book not found"}) : res.status(204).end()
+    })
 })
 
 app.listen(port, () => {
