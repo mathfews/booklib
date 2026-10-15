@@ -9,6 +9,7 @@ const pool = mysql.createPool({
     "database": "booklib"
 }).promise()
 
+// TODO: migrate password and username to a .env file
 
 const app = express()
 
@@ -17,25 +18,14 @@ app.use(express.urlencoded({ extended: true }))
 
 const port = 3000
 
-let books = [
-    {
-        "id": 1,
-        "title": "The Pragmatic Programmer",
-        "author": "Andrew Hunt"
-    },
-    {
-        "id": 2,
-        "title": "Clean Code",
-        "author": "Robert C. Martin"
-    }
-]
-
 app.get("/", (req,res) => {
     res.send("Homepage")
 })
 
 app.get("/books", (req,res) => {
-    res.json(books)
+    pool.query("select * from books").then(result => {
+        res.json(result[0])
+    })
 })
 
 app.get("/books/:id", (req,res) => {
