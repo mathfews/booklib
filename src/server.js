@@ -18,8 +18,8 @@ app.use(express.urlencoded({ extended: true }))
 
 const port = 3000
 
-function validateData(title, author) {
-    if ((typeof title != "string" || typeof author != "string") || (title == null || title.trim() == "") || (author == null || author.trim() == "")) {
+function validateData(input) {
+    if ((typeof input != "string") || (input == null || input.trim() == "")) {
         return false
     }
     return true
@@ -45,7 +45,7 @@ app.get("/books/:id", (req,res) => {
 app.post("/books", async (req, res) => {
     const {title, author} = req.body
 
-    if (!validateData(title, author)) {
+    if (!(validateData(title) && validateData(author))) {
         return res.status(400).end()
     }
 
