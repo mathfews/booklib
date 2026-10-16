@@ -18,6 +18,13 @@ app.use(express.urlencoded({ extended: true }))
 
 const port = 3000
 
+function validateData(title, author) {
+    if ((typeof title != "string" || typeof author != "string") || (title == null || title.trim() == "") || (author == null || author.trim() == "")) {
+        return false
+    }
+    return true
+}
+
 app.get("/", (req,res) => {
     res.send("Homepage")
 })
@@ -38,7 +45,7 @@ app.get("/books/:id", (req,res) => {
 app.post("/books", async (req, res) => {
     const {title, author} = req.body
 
-    if ((typeof title != "string" || typeof author != "string") || (title == null || title.trim() == "") || (author == null || author.trim() == "")) {
+    if (!validateData(title, author)) {
         return res.status(400).end()
     }
 
@@ -60,8 +67,11 @@ app.delete("/books/:id", async (req, res) => {
 
 app.patch("/books/:id", async (req, res) => {
     const id = req.params.id
+
     const {title, author} = req.body
+
     const avalibleColumns = [title, author, id]
+
     if (title == null && author == null) {
         return res.status(400).end()
     }
