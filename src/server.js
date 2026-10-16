@@ -37,8 +37,18 @@ app.get("/books/:id", (req,res) => {
 
 app.post("/books", async (req, res) => {
     const {title, author} = req.body
-    await pool.query("insert into books (title, author) values (? , ?)", [title, author])
-    res.end()
+
+    if ((typeof title != "string" || typeof author != "string") || (title == null || title.trim() == "") || (author == null || author.trim() == "")) {
+        return res.status(400).end()
+    }
+
+    const formattedTitle = title.trim()
+
+    const formattedAuthor = author.trim()
+
+    await pool.query("insert into books (title, author) values (? , ?)", [formattedTitle, formattedAuthor]).then(result => {
+        res.status(201).end()
+    })
 })
 
 app.delete("/books/:id", async (req, res) => {
