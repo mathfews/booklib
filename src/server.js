@@ -85,14 +85,27 @@ app.patch("/books/:id", async (req, res) => {
 app.put("/books/:id", async (req, res) => {
     const id = req.params.id
     const {title, author} = req.body
-    if (title == null || author == null) {
+
+    if (!validateData(title, author)) {
         return res.status(400).end()
     }
-    else {
-        await pool.query("update books set title = ?, author = ? where id = ?", [title, author, id]).then(result => {
-            result[0].affectedRows === 0 ? res.status(404).json({"message": "Book not found"}) : res.status(200).json({"message": `Book ${id} updated succesfully`})
-        })
-    }
+
+    const formattedTitle = title.trim()
+
+    const formattedAuthor = author.trim()
+
+    await pool.query("update books set title = ?, author = ? where id = ?", [formattedTitle, formattedAuthor, id]).then(async result => {
+        if (result[0].affectedRows != 0) {
+            return res.status(200).json({"message": `Book ${id} updated succesfully`})
+        }
+        else {
+            const selectedBook = await pool.query("select * from books where id = ?",[id])
+            if (selectedBook[0].length == 0) {
+                return res.status(404).end()
+            }
+            return res.status(200).json({message: `Book ${id} already has these values`})
+        }
+    })
 })
 
 app.listen(port, () => {
