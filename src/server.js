@@ -76,7 +76,9 @@ app.patch("/books/:id", async (req, res) => { // partial modification, just one 
         return res.status(400).end()
     }
 
-    const allowedColumns = ["title", "author"]
+    let allowedColumns = await pool.query("describe books")
+    allowedColumns = allowedColumns[0].map((column) => column.Field)
+    allowedColumns = allowedColumns.filter((column) => column != "id")
 
     const availableColumns = [] // "author"
     const availableColumnsValues = [] // "1984"
