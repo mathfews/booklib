@@ -16,7 +16,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const port = 300
+const port = 3000
 
 function validateData(input) {
     if ((typeof input != "string") || (input == undefined || input.trim() == "")) {
